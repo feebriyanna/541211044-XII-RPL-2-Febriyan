@@ -60,16 +60,20 @@ module.exports ={
        
        
       },
-      delete: (req, res) => {
-        const id = req.params.id
-        users = users.filter(user => user.id != id)
-    
-        res.json({
-            status: true,
-            data: users,
-            method:req.method,
-            url: req.url,
-            messege: "Data berhasil dihapus"
-        })
+      delete: async (req, res) => {
+        try {
+            await User.findByIdAndDelete(req.params.id)
+            res.json({
+                status: true,
+                data: users,
+                method:req.method,
+                url: req.url,
+                messege: "Data berhasil dihapus"
+            })
+        } catch (error) {
+            res.status(400).json({sucess: false, error: error.message})
+        }
+        
+        
       }
 }
