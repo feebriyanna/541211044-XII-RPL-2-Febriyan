@@ -40,22 +40,25 @@ module.exports ={
         }
 
       },
-      update: (req, res) => {
+      update: async (req, res) => {
+        try {
+            const user =await User.findByIdAndUpdate(req.params.id, req.body, {
+                new : true,
+                runValidators: true
+            })
+            res.json({
+                status: true,
+                data: user,
+                method:req.method,
+                url: req.url,
+                messege: "Data berhasil diubah"
+            })
+        } catch (error) {
+            res.status(400).json({sucess: false, error: error.message})
+        }
         const id = req.params.id
-        users.filter(user => {
-            if(user.id == id){
-                user.nama= req.body.nama
-                user.email= req.body.email
-                return user
-            }
-        })
-        res.json({
-            status: true,
-            data: users,
-            method:req.method,
-            url: req.url,
-            messege: "Data berhasil diubah"
-        })
+       
+       
       },
       delete: (req, res) => {
         const id = req.params.id
